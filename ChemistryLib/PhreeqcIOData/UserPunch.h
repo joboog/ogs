@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "ChemistryLib/Output.h"
+#include "MeshLib/PropertyVector.h"
 
 namespace BaseLib
 {
@@ -24,17 +25,21 @@ namespace ChemistryLib
 {
 struct SecondaryVariable
 {
-    SecondaryVariable(std::string&& name_) : name(std::move(name_)) {}
+    SecondaryVariable(std::string&& name_,
+                      MeshLib::PropertyVector<double>* value_)
+        : name(std::move(name_)),
+               value(value_) {}
 
     std::string const name;
-    double value = std::numeric_limits<double>::quiet_NaN();
+    //double value = std::numeric_limits<double>::quiet_NaN();
+    MeshLib::PropertyVector<double>* value;
     static const ItemType item_type = ItemType::SecondaryVariable;
 };
 
 struct UserPunch
 {
     UserPunch(
-        std::vector<std::vector<SecondaryVariable>>&& secondary_variables_,
+        std::vector<SecondaryVariable>&& secondary_variables_,
         std::vector<std::string>&& statements_)
         : secondary_variables(secondary_variables_), statements(statements_)
     {
@@ -43,7 +48,7 @@ struct UserPunch
     friend std::ostream& operator<<(std::ostream& os,
                                     UserPunch const& user_punch);
 
-    std::vector<std::vector<SecondaryVariable>> secondary_variables;
+    std::vector<SecondaryVariable> secondary_variables;
     std::vector<std::string> const statements;
 };
 }  // namespace ChemistryLib

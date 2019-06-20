@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <boost/optional/optional.hpp>
+#include <boost/optional/optional_fwd.hpp>
 #include <memory>
 
 namespace BaseLib
@@ -22,9 +22,15 @@ namespace ChemistryLib
 struct UserPunch;
 }
 
+namespace MeshLib
+{
+class Mesh;
+}
+
 namespace ChemistryLib
 {
 std::unique_ptr<UserPunch> createUserPunch(
-    std::size_t const& num_chemical_systems,
+    //std::size_t const& num_chemical_systems,
+    MeshLib::Mesh const& mesh,
     boost::optional<BaseLib::ConfigTree> const& config);
 }  // namespace ChemistryLib

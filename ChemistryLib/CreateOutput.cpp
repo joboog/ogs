@@ -38,8 +38,8 @@ std::unique_ptr<Output> createOutput(
     if (user_punch != nullptr)
     {
         auto const& secondary_variables = user_punch->secondary_variables;
-        auto const& secondary_variables_per_chem_sys = secondary_variables[0];
-        std::transform(secondary_variables_per_chem_sys.begin(), secondary_variables_per_chem_sys.end(),
+        //auto const& secondary_variables_per_chem_sys = secondary_variables[0];
+        std::transform(secondary_variables.begin(), secondary_variables.end(),
                        std::back_inserter(accepted_items), accepted_item);
     }
 

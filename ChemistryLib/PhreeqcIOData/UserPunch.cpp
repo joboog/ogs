@@ -17,8 +17,8 @@ std::ostream& operator<<(std::ostream& os, UserPunch const& user_punch)
 {
     os << "-headings ";
     auto const& secondary_variables = user_punch.secondary_variables;
-    auto const& secondary_variables_per_chem_sys = secondary_variables.begin();
-    for (auto& secondary_variable : *secondary_variables_per_chem_sys)
+    //auto const& secondary_variables_per_chem_sys = secondary_variables.begin();
+    for (auto& secondary_variable : secondary_variables)
         os << secondary_variable.name.c_str() << " ";
     os << "\n";
 

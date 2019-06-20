@@ -417,15 +417,15 @@ std::istream& operator>>(std::istream& in, PhreeqcIO& phreeqc_io)
                 case ItemType::SecondaryVariable:
                 {
                     auto& user_punch = phreeqc_io._user_punch;
-                    auto& secondary_variables =
-                    user_punch->secondary_variables[chemical_system_id];
+                    auto& secondary_variables = user_punch->secondary_variables;
                     // Update values of secondary variables
                     auto& secondary_variable = BaseLib::findElementOrError(
                         secondary_variables.begin(), secondary_variables.end(),
                         compare_by_name,
                         "Could not find secondary variable'" + item_name +
                             "'.");
-                    secondary_variable.value = accepted_items[item_id];
+                    (*secondary_variable.value)[chemical_system_id] =
+                         accepted_items[item_id];
                     break;
                 }
             }

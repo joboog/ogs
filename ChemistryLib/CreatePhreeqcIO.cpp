@@ -107,7 +107,7 @@ std::unique_ptr<PhreeqcIO> createPhreeqcIO(
 
     // user punch
     auto user_punch =
-        createUserPunch(num_chemical_systems,
+        createUserPunch(mesh,
                         //! \ogs_file_param{prj__chemical_system__user_punch}
                         config.getConfigSubtreeOptional("user_punch"));
 

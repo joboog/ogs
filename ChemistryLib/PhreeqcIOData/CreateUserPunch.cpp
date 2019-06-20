@@ -9,11 +9,13 @@
 
 #include "BaseLib/ConfigTree.h"
 #include "UserPunch.h"
+#include "MeshLib/Mesh.h"
 
 namespace ChemistryLib
 {
 std::unique_ptr<UserPunch> createUserPunch(
-    std::size_t const& num_chemical_systems,
+    //std::size_t const& num_chemical_systems,
+    MeshLib::Mesh const& mesh,
     boost::optional<BaseLib::ConfigTree> const& config)
 {
     if (!config)
@@ -22,11 +24,23 @@ std::unique_ptr<UserPunch> createUserPunch(
     auto secondary_variable_names =
         config->getConfigParameter<std::vector<std::string>>("headline");
 
-    std::vector<SecondaryVariable> secondary_variables_per_chem_sys;
+    std::vector<SecondaryVariable> secondary_variables;
     for (auto& variable_name : secondary_variable_names)
-        secondary_variables_per_chem_sys.emplace_back(std::move(variable_name));
-    std::vector<std::vector<SecondaryVariable>> secondary_variables(
-        num_chemical_systems, secondary_variables_per_chem_sys);
+    {
+        auto value = MeshLib::getOrCreateMeshProperty<double>(
+            const_cast<MeshLib::Mesh&>(mesh),
+            variable_name,
+            MeshLib::MeshItemType::Node,
+            1);
+        std::fill(std::begin(*value), std::end(*value), 0);
+
+        secondary_variables.emplace_back(std::move(variable_name),
+                                         value);
+
+    }
+    //std::vector<std::vector<SecondaryVariable>> secondary_variables(
+    //    num_chemical_systems, secondary_variables_per_chem_sys);
+
 
     std::vector<std::string> statements;
     auto const statements_config =
