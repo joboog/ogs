@@ -31,8 +31,7 @@ struct EquilibriumPhase
         : name(std::move(name_)),
           amount(amount_),
           saturation_index(saturation_index_)
-    {
-    }
+    {}
 
     void print(std::ostream& os, std::size_t const chemical_system_id) const;
 

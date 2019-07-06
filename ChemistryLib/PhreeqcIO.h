@@ -46,6 +46,9 @@ public:
     void doWaterChemistryCalculation(
         std::vector<GlobalVector*>& process_solutions, double const dt);
 
+    void InitializeChemistrySystems(
+        std::vector<GlobalVector*> const& process_solutions);
+
     void setAqueousSolutionsOrUpdateProcessSolutions(
         std::vector<GlobalVector*> const& process_solutions,
         Status const status);
