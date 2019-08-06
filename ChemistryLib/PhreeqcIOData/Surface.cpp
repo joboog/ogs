@@ -15,8 +15,19 @@ namespace ChemistryLib
 {
 std::ostream& operator<<(std::ostream& os, SurfaceSite const& surface_site)
 {
-    os << surface_site.name.c_str() << " " << surface_site.site_density << " "
-       << surface_site.specific_area << " " << surface_site.mass << "\n";
+    os << surface_site.name.c_str() << " ";
+
+    if (surface_site.sites != 0)
+    {
+        os << surface_site.sites << " ";
+    }
+
+    if (surface_site.site_density != 0)
+    {
+        os << surface_site.site_density << " ";
+    }
+
+       os << surface_site.specific_area << " " << surface_site.mass << "\n";
 
     return os;
 }

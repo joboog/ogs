@@ -22,10 +22,12 @@ namespace ChemistryLib
 struct SurfaceSite
 {
     SurfaceSite(std::string&& name_,
+                double sites_,
                 double site_density_,
                 double specific_area_,
                 double mass_)
         : name(std::move(name_)),
+          sites(sites_),
           site_density(site_density_),
           specific_area(specific_area_),
           mass(mass_)
@@ -36,6 +38,7 @@ struct SurfaceSite
                                     SurfaceSite const& surface_site);
 
     std::string const name;
+    double const sites;
     double const site_density;
     double const specific_area;
     double mass;
