@@ -354,10 +354,7 @@ std::istream& operator>>(std::istream& in, PhreeqcIO& phreeqc_io)
 
         auto& aqueous_solution =
             phreeqc_io._aqueous_solutions[chemical_system_id];
-        auto& components = aqueous_solution.components;
-        auto& user_punch = phreeqc_io._user_punch;
-        auto& secondary_variables =
-            user_punch->secondary_variables[chemical_system_id];
+        auto& components = aqueous_solution.components;     
         auto& equilibrium_phases = phreeqc_io._equilibrium_phases;
         auto& kinetic_reactants = phreeqc_io._kinetic_reactants;
 
@@ -419,6 +416,9 @@ std::istream& operator>>(std::istream& in, PhreeqcIO& phreeqc_io)
                 }
                 case ItemType::SecondaryVariable:
                 {
+                    auto& user_punch = phreeqc_io._user_punch;
+                    auto& secondary_variables =
+                    user_punch->secondary_variables[chemical_system_id];
                     // Update values of secondary variables
                     auto& secondary_variable = BaseLib::findElementOrError(
                         secondary_variables.begin(), secondary_variables.end(),

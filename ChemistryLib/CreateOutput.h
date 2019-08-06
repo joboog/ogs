@@ -23,6 +23,6 @@ std::unique_ptr<Output> createOutput(
     std::vector<Component> const& components,
     std::vector<EquilibriumPhase> const& equilibrium_phases,
     std::vector<KineticReactant> const& kinetic_reactants,
-    std::vector<SecondaryVariable> const& secondary_variables,
+    std::unique_ptr<UserPunch> const& user_punch,
     std::string const& project_file_name);
 }  // namespace ChemistryLib

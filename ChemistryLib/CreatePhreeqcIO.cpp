@@ -112,14 +112,12 @@ std::unique_ptr<PhreeqcIO> createPhreeqcIO(
                         config.getConfigSubtreeOptional("user_punch"));
 
     // output
-    auto const& secondary_variables = user_punch->secondary_variables;
-    auto const& secondary_variables_per_chem_sys = secondary_variables.begin();
     auto const project_file_name = BaseLib::joinPaths(
         output_directory,
         BaseLib::extractBaseNameWithoutExtension(config.getProjectFileName()));
     auto output = createOutput(components_per_chem_sys, equilibrium_phases,
                                kinetic_reactants,
-                               *secondary_variables_per_chem_sys, project_file_name);
+                               user_punch, project_file_name);
 
     return std::make_unique<PhreeqcIO>(
         project_file_name, std::move(path_to_database),

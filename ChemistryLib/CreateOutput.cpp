@@ -18,7 +18,7 @@ std::unique_ptr<Output> createOutput(
     std::vector<Component> const& components,
     std::vector<EquilibriumPhase> const& equilibrium_phases,
     std::vector<KineticReactant> const& kinetic_reactants,
-    std::vector<SecondaryVariable> const& secondary_variables,
+    std::unique_ptr<UserPunch> const& user_punch,
     std::string const& project_file_name)
 {
     // Mark which phreeqc output items will be held.
@@ -34,8 +34,15 @@ std::unique_ptr<Output> createOutput(
                    std::back_inserter(accepted_items), accepted_item);
     std::transform(kinetic_reactants.begin(), kinetic_reactants.end(),
                    std::back_inserter(accepted_items), accepted_item);
-    std::transform(secondary_variables.begin(), secondary_variables.end(),
-                   std::back_inserter(accepted_items), accepted_item);
+
+    if (user_punch != nullptr)
+    {
+        auto const& secondary_variables = user_punch->secondary_variables;
+        auto const& secondary_variables_per_chem_sys = secondary_variables[0];
+        std::transform(secondary_variables_per_chem_sys.begin(), secondary_variables_per_chem_sys.end(),
+                       std::back_inserter(accepted_items), accepted_item);
+    }
+
 
     // Record ids of which phreeqc output items will be dropped.
     BasicOutputSetups basic_output_setups(project_file_name);
