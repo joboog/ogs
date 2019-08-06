@@ -251,7 +251,12 @@ std::ostream& operator<<(std::ostream& os, PhreeqcIO const& phreeqc_io)
             os << "SURFACE " << chemical_system_id + 1 << "\n";
             os << "-equilibrate with solution " << chemical_system_id + 1
                << "\n";
-            os << "-sites_units DENSITY" << "\n";
+
+            if (surface[0].site_density != 0)
+            {
+                os << "-sites_units DENSITY" << "\n";
+            }
+
             os << surface << "\n";
         }
 
