@@ -37,6 +37,7 @@ PhreeqcIO::PhreeqcIO(std::string const& project_file_name,
                      std::vector<EquilibriumPhase>&& equilibrium_phases,
                      std::vector<KineticReactant>&& kinetic_reactants,
                      std::vector<ReactionRate>&& reaction_rates,
+                     std::vector<std::vector<SurfaceSite>>&& surfaces,
                      std::unique_ptr<UserPunch>&& user_punch,
                      std::unique_ptr<Output>&& output,
                      std::vector<std::pair<int, std::string>> const&
@@ -48,6 +49,7 @@ PhreeqcIO::PhreeqcIO(std::string const& project_file_name,
       _equilibrium_phases(std::move(equilibrium_phases)),
       _kinetic_reactants(std::move(kinetic_reactants)),
       _reaction_rates(std::move(reaction_rates)),
+      _surfaces(std::move(surfaces)),
       _user_punch(std::move(user_punch)),
       _output(std::move(output)),
       _process_id_to_component_name_map(process_id_to_component_name_map)
@@ -243,6 +245,16 @@ std::ostream& operator<<(std::ostream& os, PhreeqcIO const& phreeqc_io)
             os << "-steps " << phreeqc_io._dt << "\n" << "\n";
         }
 
+        auto const& surface = phreeqc_io._surfaces[chemical_system_id];
+        if (!surface.empty())
+        {
+            os << "SURFACE " << chemical_system_id + 1 << "\n";
+            os << "-equilibrate with solution " << chemical_system_id + 1
+               << "\n";
+            os << "-sites_units DENSITY" << "\n";
+            os << surface << "\n";
+        }
+
         os << "END" << "\n" << "\n";
     }
 
@@ -295,14 +307,21 @@ std::istream& operator>>(std::istream& in, PhreeqcIO& phreeqc_io)
     std::string line;
     auto const& output = *phreeqc_io._output;
     auto const& dropped_item_ids = output.dropped_item_ids;
+
+
+
     std::size_t const num_chemical_systems =
         phreeqc_io._aqueous_solutions.size();
     for (std::size_t chemical_system_id = 0;
          chemical_system_id < num_chemical_systems;
          ++chemical_system_id)
     {
-        // Skip equilibrium calculation result of initial solution
-        in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        //skip equilibrium calculation resutls of initial solution1,
+        // solution+1 and surface_site
+        auto const& surfaces = phreeqc_io._surfaces[chemical_system_id];
+        int const num_skipped_lines = surfaces.empty() ? 1 : 3;
+        for (int i = 0; i < num_skipped_lines; ++i)
+            in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         // Get calculation result of the solution after the reaction
         if (!std::getline(in, line))
